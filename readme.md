@@ -20,3 +20,9 @@ pnpm run start
 pnpm run electron
 
 ```
+
+打包
+
+```bash
+pnpm run build
+```
