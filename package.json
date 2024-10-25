@@ -1,11 +1,16 @@
 {
   "name": "react-electron-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "一个使用 React 和 Electron 构建的桌面应用",
   "main": "main.js",
   "scripts": {
     "start": "webpack serve --mode development",
-    "electron": "electron ."
+    "electron": "electron .",
+    "dev": "concurrently \"pnpm run build\" \"pnpm run electron\"",
+    "build": "webpack --mode production",
+    "electron-pack": "electron-builder build --mac --win --linux",
+    "lint": "eslint .",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -23,14 +28,26 @@
     "html-webpack-plugin": "^5.6.3",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0"
+    "webpack-dev-server": "^5.1.0",
+    "concurrently": "^8.2.1",
+    "wait-on": "^7.0.1",
+    "electron-builder": "^24.6.3",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "jest": "^29.7.0",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "terser-webpack-plugin": "^5.3.9"
   },
   "build": {
     "appId": "com.yourcompany.yourappname",
     "productName": "Your App Name",
     "mac": {
       "category": "public.app-category.utilities",
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "dmg": {
       "contents": [
@@ -47,7 +64,7 @@
       ]
     },
     "files": [
-      "build/**/*",
+      "dist/**/*",
       "node_modules/**/*",
       "package.json",
       "main.js"
