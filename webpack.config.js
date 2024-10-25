@@ -7,7 +7,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -33,8 +33,8 @@ module.exports = {
     },
     historyApiFallback: true,
     hot: true,
-    port: 8080,
-    host: 'localhost', // 添加这一行
+    port: 3000,
+    host: 'localhost',
   },
   optimization: {
     minimizer: [new TerserPlugin()],

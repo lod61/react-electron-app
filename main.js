@@ -1,8 +1,25 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const fs = require('fs');
 
 let mainWindow;
+
+console.log('Electron main process starting...');
+console.log('ELECTRON_START_URL:', process.env.ELECTRON_START_URL);
+
+function loadURL(url, retries = 30) {
+  mainWindow.loadURL(url)
+    .then(() => console.log('Window loaded successfully'))
+    .catch(err => {
+      console.error(`Failed to load window (attempt ${31 - retries}/30):`, err);
+      if (retries > 0) {
+        console.log(`Retrying in 1 second...`);
+        setTimeout(() => loadURL(url, retries - 1), 1000);
+      } else {
+        console.error('Max retries reached, unable to load window');
+        app.quit();
+      }
+    });
+}
 
 function createWindow() {
   console.log('Creating window...');
@@ -13,32 +30,21 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: false,
       nodeIntegration: true,
+      webSecurity: false
     },
   });
 
-  const indexPath = path.join(__dirname, 'dist', 'index.html');
-  console.log('Attempting to load file:', indexPath);
+  const startUrl = process.env.ELECTRON_START_URL || `file://${path.join(__dirname, './dist/index.html')}`;
   
-  if (fs.existsSync(indexPath)) {
-    console.log('index.html file exists');
-  } else {
-    console.error('index.html file does not exist');
-  }
-
-  mainWindow.loadFile(indexPath)
-    .then(() => {
-      console.log('File loaded successfully');
-    })
-    .catch(e => {
-      console.error('Failed to load app:', e);
-      app.quit();
-    });
-
-  mainWindow.webContents.openDevTools();
+  console.log('Loading URL:', startUrl);
+  
+  loadURL(startUrl);
 
   mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
     console.error('Page failed to load:', errorCode, errorDescription);
   });
+
+  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;
