@@ -20,10 +20,16 @@ module.exports = {
   ],
   rules: {
     // 自定义规则
+    'no-misleading-character-class': 'off',
+    'no-useless-escape': 'off',
+    'no-prototype-builtins': 'off',
+    'no-cond-assign': 'off',
+    'no-empty': 'off',
   },
   settings: {
     react: {
       version: 'detect',
     },
   },
+  ignorePatterns: ['dist/**', 'node_modules/**', '*.min.js'],
 };

@@ -10,6 +10,7 @@
     "build": "webpack --mode production",
     "electron-pack": "electron-builder build --mac --win --linux",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "jest"
   },
   "keywords": [],
