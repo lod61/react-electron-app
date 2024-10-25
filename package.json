@@ -9,9 +9,10 @@
     "dev": "concurrently \"pnpm start\" \"pnpm run electron\" --verbose",
     "build": "webpack --mode production",
     "electron-pack": "electron-builder build --mac --arm64 --x64",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test": "jest"
+    "lint": "node --experimental-vm-modules node_modules/eslint/bin/eslint.js src main.js preload.js",
+    "lint:fix": "node --experimental-vm-modules node_modules/eslint/bin/eslint.js src main.js preload.js --fix",
+    "test": "jest --config jest.config.cjs",
+    "postinstall": "cp .git/hooks/prepare-commit-msg .git/hooks/prepare-commit-msg.backup || true && cp prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg"
   },
   "keywords": [],
   "author": "",
@@ -21,25 +22,30 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.9",
-    "@babel/preset-env": "^7.25.9",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.25.9",
     "babel-loader": "^9.2.1",
-    "concurrently": "^8.2.1",
+    "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
-    "electron": "^33.0.2",
-    "electron-builder": "^24.6.3",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react": "^7.33.2",
+    "css-loader": "^6.11.0",
+    "electron": "^26.6.10",
+    "electron-builder": "^24.13.3",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "@eslint/js": "^9.13.0",
     "html-webpack-plugin": "^5.6.3",
     "jest": "^29.7.0",
-    "style-loader": "^3.3.3",
-    "terser-webpack-plugin": "^5.3.9",
+    "jest-environment-jsdom": "^29.7.0",
+    "style-loader": "^3.3.4",
+    "terser-webpack-plugin": "^5.3.10",
     "wait-on": "^7.2.0",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.1.0"
+    "webpack-dev-server": "^4.15.2",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2"
   },
   "build": {
     "appId": "com.yourcompany.yourappname",
@@ -74,5 +80,11 @@
     "directories": {
       "buildResources": "assets"
     }
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ]
   }
 }
